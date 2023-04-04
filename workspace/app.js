@@ -1,22 +1,22 @@
 const express = require('express');
 let Product = require("./Product.js");
-let Mongo = require("./Mongo.js");
+//let Mongo = require("./Mongo.js");
 const {MongoClient} = require("mongodb");
 
 const app = express();
 const uri = "mongodb://admin:password@localhost:27017/admin";
 
-app.get('/', (req, res) => {
+app.get('/',  (req, res) => {
     let product1 = new Product("Product 1");
-    let product2= new Product("Product 2");
+    let product2 = new Product("Product 2");
     let product3 = new Product("Product 3");
     var products = [];
     products.push(product1, product2, product3);
 
     let str = JSON.stringify(products);
 
-    Connect();
-
+    connect();
+    console.log("Response sended");
     res.send(str);
 });
 
@@ -27,19 +27,16 @@ app.listen(PORT, () => {
 });
 
 
-async function Connect(){
-    /**
-     * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
-     * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
-     */
+async function connect(){
+
     const client = new MongoClient(uri);
 
     try {
         // Connect to the MongoDB cluster
         await client.connect();
-
+        console.log("Client connected");
         // Make the appropriate DB calls
-        await  listDatabases(client);
+        await listDatabases(client);
 
     } catch (e) {
         console.error(e);
